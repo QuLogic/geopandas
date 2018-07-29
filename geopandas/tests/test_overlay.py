@@ -1,4 +1,5 @@
 import os
+import platform
 
 import pandas as pd
 
@@ -107,6 +108,9 @@ def test_overlay(dfs_index, how):
 
 @pytest.mark.filterwarnings("ignore:GeoSeries crs mismatch:UserWarning")
 def test_overlay_nybb(how):
+    if how != 'difference' and platform.machine() in ('aarch64', 'ppc64le', 's390x'):
+        pytest.xfail('platform-specific problems')
+
     polydf = read_file(geopandas.datasets.get_path("nybb"))
 
     # construct circles dataframe
